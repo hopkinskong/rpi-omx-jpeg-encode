@@ -77,4 +77,4 @@ You can extract the omx code in jpeg_bench.cpp and copy into your project to use
 
 ### References ###
 - Supplied image: [https://commons.wikimedia.org/wiki/File:Burosch_Blue-Only_Test_pattern.jpg](https://commons.wikimedia.org/wiki/File:Burosch_Blue-Only_Test_pattern.jpg)
-- OMX Encoder inspiration: [https://github.com/tjormola/rpi-openmax-demos/](OpenMAX IL demos for Raspberry Pi)
+- OMX Encoder inspiration: [OpenMAX IL demos for Raspberry Pi](https://github.com/tjormola/rpi-openmax-demos/)
