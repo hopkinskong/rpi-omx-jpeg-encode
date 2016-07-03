@@ -7,6 +7,12 @@ This repository contains source code to utilize the hardware JPEG encoder on the
 ### Building ###
 	make clean && make all
 
+### Usage ###
+	./jpeg-bench <frame_count> > <jpeg_data_output>
+	Recommended <jpeg_data_output> to /dev/null
+	Example: ./jpeg-bench 20 > /dev/null
+	If you want to output single JPEG image with OMX Encoder, modify the soruce code of jpeg_bench.cpp, set "ENABLE_WRITE_IN_B4" to 1 and others to 0, compile and run with ./jpeg_bench 1 > ./omx_image.jpg
+
 ### Files ###
 **Makefile:**
 > Makefile for the project

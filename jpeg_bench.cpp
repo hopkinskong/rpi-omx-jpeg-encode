@@ -1,14 +1,14 @@
 // Input data defines
-#define IMAGE_WIDTH 1280		// JPEG image width
-#define IMAGE_HEIGHT 720		// JPEG image height
-#define IMAGE_CHANNELS 3		// JPEG image channels (RGB=3channels)
-#define IMAGE_STRIDES 3			// Internal encoder strides, do not modify unless you know what you are doing.
-								// The multiplier(3) comes from my previous experience from OMX video encoder.
+#define IMAGE_WIDTH 1280	// JPEG image width
+#define IMAGE_HEIGHT 720	// JPEG image height
+#define IMAGE_CHANNELS 3	// JPEG image channels (RGB=3channels)
+#define IMAGE_STRIDES 3		// Internal encoder strides, do not modify unless you know what you are doing.
+				// The multiplier(3) comes from my previous experience from OMX video encoder.
 #define ENABLE_WRITE_IN_B1 1	// Enable write() in benchmark 1, useful when you want to enable only 1 benchmark, and output 1 frame only to a file (i.e. Generate 1 JPG image only)
 #define ENABLE_WRITE_IN_B2 1	// Enable write() in benchmark 2, useful when you want to enable only 1 benchmark, and output 1 frame only to a file (i.e. Generate 1 JPG image only)
 #define ENABLE_WRITE_IN_B3 1	// Enable write() in benchmark 3, useful when you want to enable only 1 benchmark, and output 1 frame only to a file (i.e. Generate 1 JPG image only)
 #define ENABLE_WRITE_IN_B4 1	// Enable write() in benchmark 4, useful when you want to enable only 1 benchmark, and output 1 frame only to a file (i.e. Generate 1 JPG image only)
-								// For example: ONLY set "ENABLE_WRITE_IN_B4" to 1, and run "./jpeg_bench 1 > ./omx_image.jpg". This will output 1 jpeg image using omx jpeg encoder.
+				// For example: ONLY set "ENABLE_WRITE_IN_B4" to 1, and run "./jpeg_bench 1 > ./omx_image.jpg". This will output 1 jpeg image using omx jpeg encoder.
 
 #include "jpeg_bench_image.h"	// JPEG image data, remember to update JPEG_DATA_SIZE marco in that file for the array size
 
