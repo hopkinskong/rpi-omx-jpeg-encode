@@ -74,3 +74,7 @@ You can extract the omx code in jpeg_bench.cpp and copy into your project to use
 
 ### Feature in the future ###
 - Add options to modify the QFactor of the JPEG encoder
+
+### References ###
+- Supplied image: [https://commons.wikimedia.org/wiki/File:Burosch_Blue-Only_Test_pattern.jpg](https://commons.wikimedia.org/wiki/File:Burosch_Blue-Only_Test_pattern.jpg)
+- OMX Encoder inspiration: [https://github.com/tjormola/rpi-openmax-demos/](OpenMAX IL demos for Raspberry Pi)
