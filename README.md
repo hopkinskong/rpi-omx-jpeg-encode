@@ -1,1 +1,70 @@
 # rpi-omx-jpeg-encode
+Hardware JPEG Encoding on Raspberry Pi using OpenMAX IL.
+
+### Description ###
+This repository contains source code to utilize the hardware JPEG encoder on the RPi GPU to do JPEG encoding.
+
+### Building ###
+	make clean && make all
+
+### Files ###
+**Makefile:**
+> Makefile for the project
+
+**jpeg_bench.cpp:**
+> Contains 4 benchmarks which compare jpeg encoding speed with openCV.
+>
+> The speedup is over 1x tested on RPi 2.
+>
+> Benchmark 1: openCV JPEG decode and openCV JPEG encode
+> 
+> Benchmark 2: openCV JPEG decode and openCV JPEG encode with 1/2 resize
+> 
+> Benchmark 3: openCV JPEG decode and openCV JPEG encode with 1/2 pryDown
+> 
+> Benchmark 4: openCV JPEG decode and RPi OMX Hardware JPEG encode
+
+*jpeg_bench.cpp relies on jpeg_bench_image.h, which provide smaple JPEG data for decoding.*
+
+*The image is taken from wikimedia:*
+
+*[https://commons.wikimedia.org/wiki/File:Burosch_Blue-Only_Test_pattern.jpg](https://commons.wikimedia.org/wiki/File:Burosch_Blue-Only_Test_pattern.jpg)*
+
+The supplied image is 1280*720 in size, feel free to use your own image in any size, remember to modify the following values when you do so:
+
+	jpeg_bench.cpp marcos:   
+	IMAGE_WIDTH		(JPEG image width)
+	IMAGE_HEIHGT	(JPEG image height)
+	IMAGE_CHANNELS	(JPEG image channels, usually 3)
+	
+	jpeg_bench_image.h marcos:
+	JPEG_DATA_SIZE	(JPEG image size)
+	
+	jpeg_bench_image.h variables:
+	jpegData		(JPEG image data)
+	
+
+### Test results ##
+- Raspberry Pi 2
+
+	[1] openCV JPEG decode and encode
+	
+	Result CPU Clocks: 24359705 (24s)
+	
+	[2] openCV JPEG decode and encode with openCV resize 1/2 *
+	
+	Result CPU Clocks: 16562283 (16s)
+	
+	[3] openCV JPEG decode and encode with openCV pryDown 1/2 *
+	
+	Result CPU Clocks: 19074908 (19s)
+	
+	[4] openCV JPEG decode and OMX encode
+	
+	Result CPU Clocks: 10463216 (10s)
+
+### Additional Notes ###
+You can extract the omx code in jpeg_bench.cpp and copy into your project to use the OMX Hardware JPEG Encoder. It is quite nice to use that to replace openCV *imencode* for JPEG as the speed up is quite noticable.
+
+### Feature in the future ###
+- Add options to modify the QFactor of the JPEG encoder
