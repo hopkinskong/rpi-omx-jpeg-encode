@@ -51,7 +51,7 @@ The supplied image is 1280*720 in size, feel free to use your own image in any s
 	
 
 ### Test results ##
-- Raspberry Pi 2
+- Raspberry Pi 2, 200 frames
 
 	[1] openCV JPEG decode and encode
 	
