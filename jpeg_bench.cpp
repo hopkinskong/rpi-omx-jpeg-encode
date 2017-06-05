@@ -2,8 +2,6 @@
 #define IMAGE_WIDTH 1280	// JPEG image width
 #define IMAGE_HEIGHT 720	// JPEG image height
 #define IMAGE_CHANNELS 3	// JPEG image channels (RGB=3channels)
-#define IMAGE_STRIDES 3		// Internal encoder strides, do not modify unless you know what you are doing.
-				// The multiplier(3) comes from my previous experience from OMX video encoder.
 #define ENABLE_WRITE_IN_B1 1	// Enable write() in benchmark 1, useful when you want to enable only 1 benchmark, and output 1 frame only to a file (i.e. Generate 1 JPG image only)
 #define ENABLE_WRITE_IN_B2 1	// Enable write() in benchmark 2, useful when you want to enable only 1 benchmark, and output 1 frame only to a file (i.e. Generate 1 JPG image only)
 #define ENABLE_WRITE_IN_B3 1	// Enable write() in benchmark 3, useful when you want to enable only 1 benchmark, and output 1 frame only to a file (i.e. Generate 1 JPG image only)
@@ -449,12 +447,12 @@ int main(int argc, char** argv) {
 	}
 	encoder_portdef.format.image.nFrameWidth=IMAGE_WIDTH;
 	encoder_portdef.format.image.nFrameHeight=IMAGE_HEIGHT;
-	encoder_portdef.format.image.nSliceHeight=IMAGE_HEIGHT;
-	encoder_portdef.format.image.nStride=IMAGE_WIDTH*IMAGE_STRIDES;
+	encoder_portdef.format.image.nSliceHeight=16;
+	encoder_portdef.format.image.nStride=0;
 	encoder_portdef.format.image.bFlagErrorConcealment=OMX_FALSE;
-	encoder_portdef.format.image.eColorFormat=OMX_COLOR_Format24bitBGR888;
+	encoder_portdef.format.image.eColorFormat=OMX_COLOR_Format24bitRGB888;
 	encoder_portdef.format.image.eCompressionFormat=OMX_IMAGE_CodingUnused;
-	encoder_portdef.nBufferSize=IMAGE_WIDTH*IMAGE_HEIGHT*IMAGE_CHANNELS*IMAGE_STRIDES;
+	encoder_portdef.nBufferSize=IMAGE_WIDTH*encoder_portdef.format.image.nSliceHeight*IMAGE_CHANNELS;
 	if((r=OMX_SetParameter(ctx.encoder, OMX_IndexParamPortDefinition, &encoder_portdef)) != OMX_ErrorNone) {
 		omx_die(r, "Failed to set port definition for encoder input port 340");
 	}
@@ -639,18 +637,35 @@ int main(int argc, char** argv) {
 		
 		ctx.encoder_input_buffer_needed=1;
 		ctx.encoder_output_buffer_available=1;
+		unsigned char* imgMatPtr = imgMat.data;
+		unsigned int imgMatPtrPos = 0;
+		unsigned int imgMatSize = IMAGE_WIDTH*IMAGE_HEIGHT*IMAGE_CHANNELS;
 		
+		int sliceSize = encoder_portdef.format.image.nFrameWidth*encoder_portdef.format.image.nSliceHeight*3;
+		ctx.encoder_input_buffer_needed=1;
+		ctx.encoder_output_buffer_available=1;
 		while(true) {
 			if(ctx.encoder_input_buffer_needed) {
 				// Encoder needs something to feed into its input buffer
-				memcpy(ctx.encoder_ppBuffer_in->pBuffer, imgMat.data, IMAGE_WIDTH*IMAGE_HEIGHT*IMAGE_CHANNELS); // We did not use the full buffer as the remaining "blank" space are for the strides
 				
-				ctx.encoder_ppBuffer_in->nOffset = 0;
-				ctx.encoder_ppBuffer_in->nFilledLen = IMAGE_WIDTH*IMAGE_HEIGHT*IMAGE_CHANNELS;
-				
-				ctx.encoder_input_buffer_needed=0;
-				if((r = OMX_EmptyThisBuffer(ctx.encoder, ctx.encoder_ppBuffer_in)) != OMX_ErrorNone) {
-					omx_die(r, "Failed to request emptying of the input buffer on encoder input port 340");
+				if(imgMatPtrPos != imgMatSize) {
+					memcpy(ctx.encoder_ppBuffer_in->pBuffer, imgMatPtr, sliceSize);
+					ctx.encoder_ppBuffer_in->nOffset = 0;
+					ctx.encoder_ppBuffer_in->nFilledLen = sliceSize;
+					
+					if(imgMatPtrPos + sliceSize > imgMatSize) {
+						// The next slice is bigger than expected
+						sliceSize = imgMatSize - imgMatPtrPos;
+						//cerr << "Warning, slice larger" << endl; // TODO: Check if this is really true
+					}
+					imgMatPtrPos += sliceSize;
+					
+					if(imgMatPtrPos != imgMatSize) imgMatPtr += sliceSize;
+					
+					ctx.encoder_input_buffer_needed=0;
+					if((r = OMX_EmptyThisBuffer(ctx.encoder, ctx.encoder_ppBuffer_in)) != OMX_ErrorNone) {
+						omx_die(r, "Failed to request emptying of the input buffer on encoder input port 340");
+					}
 				}
 			}
 			
@@ -659,6 +674,7 @@ int main(int argc, char** argv) {
 				#if ENABLE_WRITE_IN_B4 == 1
 				write(STDOUT_FILENO, ctx.encoder_ppBuffer_out->pBuffer+ctx.encoder_ppBuffer_out->nOffset, ctx.encoder_ppBuffer_out->nFilledLen);
 				#endif
+				
 				ctx.encoder_output_buffer_available=0;
 				if((ctx.encoder_ppBuffer_out->nFlags&OMX_BUFFERFLAG_ENDOFFRAME)) {
 					break;
@@ -669,6 +685,7 @@ int main(int argc, char** argv) {
 				}
 			}
 		}
+		
 	}
 	end=clock();
 	cerr << "Result CPU Clocks: " << (end-start) << " (" << (float)((end-start)/CLOCKS_PER_SEC) << "s)" << endl;

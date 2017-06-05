@@ -72,8 +72,15 @@ The supplied image is 1280*720 in size, feel free to use your own image in any s
 ### Additional Notes ###
 You can extract the omx code in jpeg_bench.cpp and copy into your project to use the OMX Hardware JPEG Encoder. It is quite nice to use that to replace openCV *imencode* for JPEG as the speed up is quite noticable.
 
+Despite the openCV Mat is using BGR888 structure, you need to configure the OMX Encoder to RGB888 to have correct image output. Please refer to [https://www.raspberrypi.org/forums/viewtopic.php?f=70&t=172670&p=1104848](this) for more information.
+
+Note to RPi1 user: The Makefile used NEON and VFPv4 optimizations which are not supported in RPi1, please remove those from the cflags.
+
 ### Feature in the future ###
 - Add options to modify the QFactor of the JPEG encoder
+
+## Known Bugs ###
+- At 1920x1080, you will get Seg. Fault, still no idea why. Tested resolutions: 1280x720, 640x480
 
 ### References ###
 - Supplied image: [https://commons.wikimedia.org/wiki/File:Burosch_Blue-Only_Test_pattern.jpg](https://commons.wikimedia.org/wiki/File:Burosch_Blue-Only_Test_pattern.jpg)
