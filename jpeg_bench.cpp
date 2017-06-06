@@ -657,7 +657,6 @@ int main(int argc, char** argv) {
 					if(imgMatPtrPos + sliceSize > imgMatSize) {
 						// The next slice is bigger than expected
 						sliceSize = imgMatSize - imgMatPtrPos;
-						//cerr << "Warning, slice larger" << endl; // TODO: Check if this is really true
 					}
 					
 					if(imgMatPtrPos != imgMatSize) imgMatPtr += sliceSize;
