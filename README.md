@@ -79,8 +79,13 @@ Note to RPi1 user: The Makefile used NEON and VFPv4 optimizations which are not 
 ### Feature in the future ###
 - Add options to modify the QFactor of the JPEG encoder
 
-## Known Bugs ###
+### Known Bugs ###
 - None yet
+
+### Tested Resolution ###
+- 640x480
+- 1280x720
+- 1920x1080
 
 ### References ###
 - Supplied image: [https://commons.wikimedia.org/wiki/File:Burosch_Blue-Only_Test_pattern.jpg](https://commons.wikimedia.org/wiki/File:Burosch_Blue-Only_Test_pattern.jpg)
