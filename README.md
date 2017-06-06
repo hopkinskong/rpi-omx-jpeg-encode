@@ -80,7 +80,7 @@ Note to RPi1 user: The Makefile used NEON and VFPv4 optimizations which are not 
 - Add options to modify the QFactor of the JPEG encoder
 
 ## Known Bugs ###
-- At 1920x1080, you will get Seg. Fault, still no idea why. Tested resolutions: 1280x720, 640x480
+- None yet
 
 ### References ###
 - Supplied image: [https://commons.wikimedia.org/wiki/File:Burosch_Blue-Only_Test_pattern.jpg](https://commons.wikimedia.org/wiki/File:Burosch_Blue-Only_Test_pattern.jpg)
