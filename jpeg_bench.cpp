@@ -653,12 +653,12 @@ int main(int argc, char** argv) {
 					ctx.encoder_ppBuffer_in->nOffset = 0;
 					ctx.encoder_ppBuffer_in->nFilledLen = sliceSize;
 					
+					imgMatPtrPos += sliceSize;
 					if(imgMatPtrPos + sliceSize > imgMatSize) {
 						// The next slice is bigger than expected
 						sliceSize = imgMatSize - imgMatPtrPos;
 						//cerr << "Warning, slice larger" << endl; // TODO: Check if this is really true
 					}
-					imgMatPtrPos += sliceSize;
 					
 					if(imgMatPtrPos != imgMatSize) imgMatPtr += sliceSize;
 					
